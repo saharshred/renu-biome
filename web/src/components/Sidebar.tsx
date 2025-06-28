@@ -70,6 +70,7 @@ const customerTabs = [
     group: 'Account Info',
     items: [
       'Unique Legacy Grower Number for Life',
+      'Place Purchase Order',
       'Invoices',
       'View/Pay/Print Bill',
     ],
@@ -77,7 +78,7 @@ const customerTabs = [
   {
     group: 'Crop Support',
     items: [
-      'Soil Card',
+      'Soil Analysis',
       'Fertilizer Recommendations',
       'ReNu Legacy Line Crop Nutrition Program',
     ],
@@ -85,7 +86,7 @@ const customerTabs = [
   {
     group: 'Support',
     items: [
-      'Schedule an Appointment with Founder',
+      'Schedule Consultation',
       'Field Visit Summary',
       'Innovations',
     ],
@@ -114,12 +115,13 @@ const labelToSlug: Record<string, string> = {
   'Calendar': 'calendar',
   // Customer
   'Unique Legacy Grower Number for Life': 'unique-legacy-grower-number-for-life',
+  'Place Purchase Order': 'place-purchase-order',
   'Invoices': 'invoices',
   'View/Pay/Print Bill': 'view-pay-print-bill',
-  'Soil Card': 'soil-card',
+  'Soil Analysis': 'soil-card',
   'Fertilizer Recommendations': 'fertilizer-recommendations-messages',
   'ReNu Legacy Line Crop Nutrition Program': 'renu-legacy-line-crop-nutrition-program',
-  'Schedule an Appointment with Founder': 'schedule-an-appointment-with-founder',
+  'Schedule Consultation': 'schedule-an-appointment-with-founder',
   'Field Visit Summary': 'field-visit-summary',
   'Innovations': 'innovations',
 };

@@ -44,10 +44,10 @@ const Page = () => {
         {/* Hero Section: Display Number */}
         <div className="bg-gradient-to-br from-green-50 to-[#208A84] rounded-3xl shadow-xl p-10 mb-16 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <Image src="/orange-checkmark.png" alt="Background pattern" layout="fill" objectFit="cover" />
+            <Image src="/renu-biome-logo-clean.png" alt="Background pattern" layout="fill" objectFit="cover" />
           </div>
           <div className="relative z-10 flex flex-col items-center justify-center text-center">
-            <Image src="/orange-checkmark.png" alt="ReNu-Biome Logo" width={80} height={80} className="mb-6" />
+            <Image src="/renu-biome-logo-clean.png" alt="ReNu-Biome Logo" width={120} height={120} className="mb-6" />
             <p className="text-white text-lg font-semibold mb-2">Your Lifetime Identifier:</p>
             <div className="flex items-center space-x-4">
               <span className="text-5xl sm:text-6xl font-bold text-white tracking-wide drop-shadow-lg">

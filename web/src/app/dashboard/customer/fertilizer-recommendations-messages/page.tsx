@@ -32,6 +32,16 @@ const fertilizerTrends = [
   { month: 'Jun', nitrogen: 18, phosphorus: 10 },
 ];
 
+// Add after fertilizerTrends
+const spendData = [
+  { month: 'Jan', thisYear: 1200, lastYear: 900 },
+  { month: 'Feb', thisYear: 1500, lastYear: 1100 },
+  { month: 'Mar', thisYear: 1800, lastYear: 1700 },
+  { month: 'Apr', thisYear: 2000, lastYear: 1900 },
+  { month: 'May', thisYear: 2200, lastYear: 2100 },
+  { month: 'Jun', thisYear: 2100, lastYear: 2000 },
+];
+
 export default function FertilizerRecommendationsPage() {
   const [selectedReport, setSelectedReport] = useState(mockReports[0]);
   const [firstName, setFirstName] = useState<string | null>(null);
@@ -118,7 +128,7 @@ export default function FertilizerRecommendationsPage() {
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         {/* Minimal Dropdown */}
-        <div className="w-full max-w-3xl mx-auto flex justify-center">
+        <div className="w-full max-w-6xl mx-auto flex justify-center">
           <select
             value={selectedReport.value}
             onChange={e => {
@@ -134,7 +144,7 @@ export default function FertilizerRecommendationsPage() {
           </select>
         </div>
         {/* Excel Viewer Card */}
-        <div className="w-full max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl border border-emerald-100 p-6 flex flex-col items-center">
+        <div className="w-full max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl border border-emerald-100 p-6 flex flex-col items-center">
           <div className="w-full flex flex-col sm:flex-row items-center justify-between mb-4 gap-2">
             <div className="flex items-center gap-2">
               <FileText className="w-6 h-6 text-emerald-600" />
@@ -149,7 +159,7 @@ export default function FertilizerRecommendationsPage() {
                 Download Excel
               </a>
               <a
-                href={selectedReport.file}
+                href="https://docs.google.com/spreadsheets/d/1X6u-JGG5L628juLuTD-CWAGyCtjaNSfF/edit?usp=sharing&ouid=105581374243189702093&rtpof=true&sd=true"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 border border-emerald-200 rounded-full bg-emerald-50 text-emerald-700 font-medium hover:bg-emerald-100 transition-colors text-sm shadow-sm"
@@ -213,6 +223,37 @@ export default function FertilizerRecommendationsPage() {
                 </YAxis>
                 <ReTooltip contentStyle={{ borderRadius: 12, fontSize: 14 }} />
                 <ReLine type="monotone" dataKey="phosphorus" name="Phosphorus (lbs/acre)" stroke="#6366f1" strokeWidth={3} dot={{ r: 5 }} activeDot={{ r: 7 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+        {/* Comparative Spend Graphs */}
+        <div className="w-full max-w-4xl mx-auto mt-12">
+          <div className="bg-white rounded-2xl shadow-lg border border-emerald-100 p-6 flex flex-col items-center mb-8">
+            <div className="w-full flex items-center mb-0.5">
+              <span className="inline-block w-4 h-4 rounded-full bg-emerald-400 mr-2"></span>
+              <h2 className="text-lg font-sans font-medium text-gray-900 tracking-tight">Monthly Spend During Season</h2>
+            </div>
+            <div className="w-full mb-3 ml-6">
+              <span className="text-sm text-gray-400 font-sans">Total fertilizer spend by month (this year vs last year)</span>
+            </div>
+            <ResponsiveContainer width="100%" height={320}>
+              <LineChart data={spendData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" stroke="#64748b" fontSize={13} tickLine={false} axisLine={false} />
+                <YAxis 
+                  stroke="#64748b" 
+                  fontSize={13} 
+                  tickLine={false} 
+                  axisLine={false} 
+                  tickFormatter={(value) => `$${value}`}
+                >
+                  <text x={-30} y={120} transform="rotate(-90)" textAnchor="middle" fill="#6366f1" fontSize="13" fontFamily="inherit">Spend ($)</text>
+                </YAxis>
+                <ReTooltip contentStyle={{ borderRadius: 12, fontSize: 14 }} />
+                <ReLine type="monotone" dataKey="thisYear" name="This Year" stroke="#10b981" strokeWidth={3} dot={{ r: 5 }} activeDot={{ r: 7 }} />
+                <ReLine type="monotone" dataKey="lastYear" name="Last Year" stroke="#6366f1" strokeWidth={3} dot={{ r: 5 }} activeDot={{ r: 7 }} />
+                <ReLegend verticalAlign="top" height={36} />
               </LineChart>
             </ResponsiveContainer>
           </div>
