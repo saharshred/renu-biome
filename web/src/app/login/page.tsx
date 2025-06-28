@@ -1,73 +1,76 @@
-'use client' // Only for app router; remove if using pages router
-
-import Image from 'next/image'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabaseClient'
+"use client";
+import { useState } from "react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [isSignUp, setIsSignUp] = useState(false)
-  
-  // Login form state
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
   // Sign-up form state
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [growerNumber, setGrowerNumber] = useState('')
-  const [signUpEmail, setSignUpEmail] = useState('')
-  const [signUpPassword, setSignUpPassword] = useState('')
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [growerNumber, setGrowerNumber] = useState("");
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
 
-  const [error, setError] = useState('')
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-  
-    const { data: { user }, error } = await supabase.auth.signInWithPassword({ email, password })
-  
-    if (error || !user) {
-      setError(error?.message || 'Login failed')
-      return
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    // Supabase login logic
+    const { data: { user }, error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+    if (loginError || !user) {
+      setError(loginError?.message || "Login failed");
+      setIsLoading(false);
+      return;
     }
-  
     // Fetch role from profiles table
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
-      .single()
-  
+      .single();
     if (profileError || !profile?.role) {
-      setError('Unable to retrieve user role')
-      return
+      setError('Unable to retrieve user role');
+      setIsLoading(false);
+      return;
     }
-  
     // Redirect based on role
     if (profile.role === 'owner') {
-      router.push('/dashboard/owner')
+      router.push('/dashboard/owner');
     } else if (profile.role === 'customer') {
-      router.push('/dashboard/customer')
+      router.push('/dashboard/customer');
     } else {
-      setError('Unknown user role')
+      setError('Unknown user role');
     }
-  }
+    setIsLoading(false);
+  };
 
   const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
     // 1. Sign up the user
     const { data: { user }, error: signUpError } = await supabase.auth.signUp({
       email: signUpEmail,
       password: signUpPassword,
-    })
-
+    });
     if (signUpError || !user) {
-      setError(signUpError?.message || 'Sign-up failed')
-      return
+      setError(signUpError?.message || 'Sign-up failed');
+      setIsLoading(false);
+      return;
     }
-
     // 2. Insert into profiles table
     const { error: profileError } = await supabase
       .from('profiles')
@@ -78,164 +81,217 @@ export default function LoginPage() {
         grower_number: growerNumber,
         email: signUpEmail,
         role: 'customer' // Default role for new sign-ups
-      })
-
+      });
     if (profileError) {
-      setError(profileError.message)
-      // Optional: clean up the user if profile creation fails
-      // await supabase.auth.api.deleteUser(user.id)
-      return
+      setError(profileError.message);
+      setIsLoading(false);
+      return;
     }
-
     // 3. Redirect to customer dashboard
-    router.push('/dashboard/customer')
-  }
+    router.push('/dashboard/customer');
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-screen flex">
-      {/* Left side image */}
-      <div className="hidden lg:flex w-1/2 items-center justify-end bg-white">
+      {/* Left side - ReNu-Biome Marketing Image */}
+      <div className="hidden lg:block w-3/5 min-h-screen relative">
         <Image
-          src="/left-side.jpeg"
-          alt="Lush green field"
-          width={600}
-          height={800}
-          className="rounded-xl object-cover"
-          quality={90}
+          src="/renu-biome-marketing.png"
+          alt="ReNu-Biome - Nature inspired inputs for Sustainable Agriculture Production"
+          fill
+          className="object-contain object-left"
           priority
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white/5"></div>
       </div>
-      
-      {/* Right side form */}
-      <div className="flex flex-1 flex-col justify-center min-h-screen px-8 py-12 lg:px-24">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="flex justify-center items-center gap-2">
-            <Image
-              alt="ReNu-Biome logo"
-              src="/orange-checkmark.png"
-              className="h-10 w-12"
-              width={40}
-              height={40}
-            />
-            <span className="text-4xl font-bold text-[#208A84] tracking-tight">ReNu-Biome</span>
-          </div>
-        </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
+      {/* Right side - Minimal Login/Sign Up */}
+      <div className="flex-1 flex items-center justify-center min-h-screen bg-white">
+        <div className="w-full max-w-sm px-12 py-8 mx-auto flex flex-col justify-center lg:ml-0">
+          {/* Official ReNu-Biome Logo */}
+          <div className="text-center mb-6">
+            <div className="mb-6 flex justify-center">
+              <Image
+                src="/renu-biome-logo-clean.png"
+                alt="ReNu-Biome - Advanced Crop Nutrition"
+                width={220}
+                height={65}
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Minimal Form */}
           {isSignUp ? (
-            // Sign-up Form
-            <form onSubmit={handleSignUp} className="space-y-4">
-              <div className="flex gap-4">
-                <div className="w-1/2">
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-900">
-                    First Name <span className="text-red-500">*</span>
-                  </label>
-                  <div className="mt-2">
-                    <input id="firstName" name="firstName" type="text" required value={firstName} onChange={(e) => setFirstName(e.target.value)} className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#208A84] sm:text-sm" />
+            <form onSubmit={handleSignUp} className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <div className="w-1/2">
+                    <Input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="h-11 px-0 border-0 border-b-2 border-gray-200 rounded-none bg-transparent focus:border-emerald-500 focus:ring-0 placeholder:text-gray-400 text-gray-900 w-full"
+                      placeholder="First name"
+                      required
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <Input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="h-11 px-0 border-0 border-b-2 border-gray-200 rounded-none bg-transparent focus:border-emerald-500 focus:ring-0 placeholder:text-gray-400 text-gray-900 w-full"
+                      placeholder="Last name"
+                      required
+                    />
                   </div>
                 </div>
-                <div className="w-1/2">
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-900">
-                    Last Name <span className="text-red-500">*</span>
-                  </label>
-                  <div className="mt-2">
-                    <input id="lastName" name="lastName" type="text" required value={lastName} onChange={(e) => setLastName(e.target.value)} className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#208A84] sm:text-sm" />
+                <div>
+                  <Input
+                    type="text"
+                    value={growerNumber}
+                    onChange={(e) => setGrowerNumber(e.target.value)}
+                    className="h-11 px-0 border-0 border-b-2 border-gray-200 rounded-none bg-transparent focus:border-emerald-500 focus:ring-0 placeholder:text-gray-400 text-gray-900 w-full"
+                    placeholder="Grower number"
+                    required
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="email"
+                    value={signUpEmail}
+                    onChange={(e) => setSignUpEmail(e.target.value)}
+                    className="h-11 px-0 border-0 border-b-2 border-gray-200 rounded-none bg-transparent focus:border-emerald-500 focus:ring-0 placeholder:text-gray-400 text-gray-900 w-full"
+                    placeholder="Email address"
+                    required
+                  />
+                </div>
+                <div className="relative">
+                  <Input
+                    type={showSignUpPassword ? "text" : "password"}
+                    value={signUpPassword}
+                    onChange={(e) => setSignUpPassword(e.target.value)}
+                    className="h-11 px-0 pr-8 border-0 border-b-2 border-gray-200 rounded-none bg-transparent focus:border-emerald-500 focus:ring-0 placeholder:text-gray-400 text-gray-900 w-full"
+                    placeholder="Password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showSignUpPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+              {error && (
+                <div className="text-center text-sm text-red-600 font-medium pt-2">{error}</div>
+              )}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-11 bg-gray-900 hover:bg-gray-800 text-white font-medium transition-all duration-200 group relative overflow-hidden"
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   </div>
-                </div>
-              </div>
-              <div>
-                <label htmlFor="growerNumber" className="block text-sm font-medium text-gray-900">
-                  Grower Number <span className="text-red-500">*</span>
-                </label>
-                <div className="mt-2">
-                  <input id="growerNumber" name="growerNumber" type="text" required value={growerNumber} onChange={(e) => setGrowerNumber(e.target.value)} className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#208A84] sm:text-sm" />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="signUpEmail" className="block text-sm font-medium text-gray-900">
-                  Email address <span className="text-red-500">*</span>
-                </label>
-                <div className="mt-2">
-                  <input id="signUpEmail" name="signUpEmail" type="email" required value={signUpEmail} onChange={(e) => setSignUpEmail(e.target.value)} className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#208A84] sm:text-sm" />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="signUpPassword"  className="block text-sm font-medium text-gray-900">
-                  Password <span className="text-red-500">*</span>
-                </label>
-                <div className="mt-2">
-                  <input id="signUpPassword" name="signUpPassword" type="password" required value={signUpPassword} onChange={(e) => setSignUpPassword(e.target.value)} className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#208A84] sm:text-sm" />
-                </div>
-              </div>
-              {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-              <button type="submit" className="flex w-full justify-center rounded-md bg-[#208A84] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#1c6d5f]">
-                Sign up
-              </button>
+                ) : (
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>Sign up</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                )}
+              </Button>
             </form>
           ) : (
-            // Login Form
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-900">
-                  Email address <span className="text-red-500">*</span>
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="email"
-                    name="email"
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <div className="relative">
+                  <Input
                     type="email"
-                    autoComplete="email"
-                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#208A84] sm:text-sm"
+                    className="w-full h-11 px-0 border-0 border-b-2 border-gray-200 rounded-none bg-transparent focus:border-emerald-500 focus:ring-0 placeholder:text-gray-400 text-gray-900"
+                    placeholder="Email address"
+                    required
                   />
                 </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-900">
-                    Password <span className="text-red-500">*</span>
-                  </label>
-                  <div className="text-sm">
-                    <a href="#" className="font-semibold text-[#208A84] hover:text-[#1c6d5f]">
-                      Forgot password?
-                    </a>
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#208A84] sm:text-sm"
+                    className="w-full h-11 px-0 pr-8 border-0 border-b-2 border-gray-200 rounded-none bg-transparent focus:border-emerald-500 focus:ring-0 placeholder:text-gray-400 text-gray-900"
+                    placeholder="Password"
+                    required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
-              {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-              <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-[#208A84] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#1c6d5f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#208A84]"
-                >
-                  Sign in
-                </button>
+              <div className="flex items-center justify-between pt-2">
+                <Link href="/forgot-password" className="text-sm text-gray-500 hover:text-emerald-600 transition-colors">
+                  Forgot password?
+                </Link>
               </div>
+              {error && (
+                <div className="text-center text-sm text-red-600 font-medium pt-2">{error}</div>
+              )}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-11 bg-gray-900 hover:bg-gray-800 text-white font-medium transition-all duration-200 group relative overflow-hidden"
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center space-x-2">
+                    <span>Sign in</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                )}
+              </Button>
             </form>
           )}
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-            <button onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-semibold leading-6 text-[#208A84] hover:text-[#1c6d5f]">
-              {isSignUp ? 'Sign in' : 'Sign up'}
-            </button>
-          </p>
+          {/* Bottom link */}
+          <div className="text-center mt-8">
+            <p className="text-sm text-gray-500">
+              {isSignUp ? (
+                <>
+                  Already have an account?{' '}
+                  <button type="button" onClick={() => { setIsSignUp(false); setError(""); setIsLoading(false); }} className="text-emerald-600 hover:text-emerald-700 font-medium">
+                    Sign in
+                  </button>
+                </>
+              ) : (
+                <>
+                  Don't have an account?{' '}
+                  <button type="button" onClick={() => { setIsSignUp(true); setError(""); setIsLoading(false); }} className="text-emerald-600 hover:text-emerald-700 font-medium">
+                    Sign up
+                  </button>
+                </>
+              )}
+            </p>
+          </div>
+
+          {/* Minimal trust indicator */}
+          <div className="text-center mt-8 pt-8 border-t border-gray-100">
+            <p className="text-xs text-gray-400">Secured with 256-bit encryption</p>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

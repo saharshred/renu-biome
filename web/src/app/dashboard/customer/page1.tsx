@@ -1,9 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { supabase } from "@/lib/supabaseClient"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
+import { useState } from "react"
 import {
   TrendingUp,
   Calendar,
@@ -34,35 +31,7 @@ import { Progress } from "@/components/ui/progress"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export default function CustomerDashboard() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(true)
-  const [firstName, setFirstName] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/login')
-        return
-      }
-      try {
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('first_name')
-          .eq('id', user.id)
-          .single()
-        if (error) throw error
-        if (profile) {
-          setFirstName(profile.first_name)
-        }
-      } catch (error: any) {
-        console.error("Error fetching user's first name:", error.message)
-      }
-      setLoading(false)
-    }
-    fetchData()
-  }, [])
+  const [selectedTimeframe, setSelectedTimeframe] = useState("30d")
 
   // Mock data for the dashboard
   const keyMetrics = [
@@ -192,14 +161,6 @@ export default function CustomerDashboard() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full p-8">
-        <p className="text-lg text-gray-600">Loading customer dashboard...</p>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30">
       {/* Header */}
@@ -208,24 +169,19 @@ export default function CustomerDashboard() {
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-emerald-800 to-gray-900 bg-clip-text text-transparent">
-                {`Welcome Back, ${firstName || "Customer"}`}
+                Welcome Back, Jack
               </h1>
               <p className="text-gray-600">Your advanced crop nutrition command center</p>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/dashboard/customer/schedule-an-appointment-with-founder">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
-                >
-                  <span className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Schedule Consultation
-                  </span>
-                </Button>
-              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                Schedule Consultation
+              </Button>
               <div className="relative">
                 <Button variant="ghost" size="sm" className="relative">
                   <Bell className="w-5 h-5" />
@@ -445,38 +401,25 @@ export default function CustomerDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Link href="/dashboard/customer/fertilizer-recommendations-messages">
-                  <Button asChild className="w-full justify-start bg-emerald-600 hover:bg-emerald-700 text-white">
-                    <span className="flex items-center">
-                      <FileText className="w-4 h-4 mr-2" />
-                      View Recommendations
-                    </span>
-                  </Button>
-                </Link>
-                <Link href="/dashboard/customer/schedule-an-appointment-with-founder">
-                  <Button asChild variant="outline" className="w-full justify-start border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent">
-                    <span className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      Schedule Field Visit
-                    </span>
-                  </Button>
-                </Link>
-                <Link href="/dashboard/customer/soil-card">
-                  <Button asChild variant="outline" className="w-full justify-start bg-transparent">
-                    <span className="flex items-center">
-                      <BarChart3 className="w-4 h-4 mr-2" />
-                      View Analytics
-                    </span>
-                  </Button>
-                </Link>
-                <Link href="/dashboard/customer/schedule-an-appointment-with-founder">
-                  <Button asChild variant="outline" className="w-full justify-start bg-transparent">
-                    <span className="flex items-center">
-                      <Users className="w-4 h-4 mr-2" />
-                      Contact Support
-                    </span>
-                  </Button>
-                </Link>
+                <Button className="w-full justify-start bg-emerald-600 hover:bg-emerald-700 text-white">
+                  <FileText className="w-4 h-4 mr-2" />
+                  View Recommendations
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Schedule Field Visit
+                </Button>
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  View Analytics
+                </Button>
+                <Button variant="outline" className="w-full justify-start bg-transparent">
+                  <Users className="w-4 h-4 mr-2" />
+                  Contact Support
+                </Button>
               </CardContent>
             </Card>
 

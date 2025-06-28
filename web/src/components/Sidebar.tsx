@@ -170,7 +170,7 @@ export default function Sidebar({ role }: { role: string }) {
     >
       <div className="flex-shrink-0">
         {/* Top section: Logo (when expanded) or Expand Button (when collapsed) */}
-        <div className="flex items-center justify-between mb-2 h-16">
+        <div className="flex items-center justify-between w-full mb-2 h-16">
           {!isCollapsed ? (
             // Expanded state: Logo and Collapse Button
             <>
@@ -180,15 +180,13 @@ export default function Sidebar({ role }: { role: string }) {
                 aria-label="Go to Dashboard"
               >
                 <Image
-                  alt="ReNu-Biome logo"
-                  src="/orange-checkmark.png"
-                  width={44}
-                  height={44}
-                  className="h-11 w-11"
+                  alt="ReNu-Biome logo and company name"
+                  src="/renu-biome-logo-clean.png"
+                  width={220}
+                  height={60}
+                  className="h-[60px] w-auto object-contain my-2"
+                  priority
                 />
-                <span className="text-xl font-extrabold text-[#208A84] tracking-tight group-hover:text-[#1a6e68]">
-                  ReNu-Biome
-                </span>
               </button>
               <button
                 onClick={() => setIsCollapsed(true)}

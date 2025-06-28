@@ -1,94 +1,104 @@
-'use client'
-
-import { Calendar, Info, Mail, Phone, Clock } from 'lucide-react'
-import Script from 'next/script'
+"use client"
+import { Calendar, Clock, CheckCircle, Phone, Mail } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import Script from "next/script"
 
 export default function ScheduleAppointmentPage() {
-
   return (
-    <>
+    <div className="min-h-screen bg-white">
       <Script 
         src="https://assets.calendly.com/assets/external/widget.js" 
         strategy="afterInteractive" 
       />
-      <div className="p-8 bg-gray-50 min-h-screen">
-        {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-4xl font-extrabold text-[#208A84] mb-2">Schedule an Appointment</h1>
-          <p className="text-lg text-gray-600">Book a personalized consultation with our founder.</p>
+      {/* Clean Header */}
+      <div className="border-b border-gray-100 bg-gradient-to-br from-white to-emerald-50/30">
+        <div className="max-w-4xl mx-auto px-6 py-16 text-center">
+          <h1 className="text-5xl font-light text-gray-900 mb-6">Schedule Your Consultation</h1>
+          <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
+            Book a personalized session with <span className="text-emerald-600 font-medium">Dr. Raj Madam</span>, our
+            founder, and transform your crop nutrition program
+          </p>
         </div>
+      </div>
 
-        {/* Main Content Card */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            
-            {/* Left Column: Calendly Embed */}
-            <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <Calendar className="mr-3 text-[#208A84]" />
-                Select a Date & Time
-              </h2>
-              
-              <div 
-                className="calendly-inline-widget rounded-lg overflow-hidden border border-gray-200" 
-                data-url="https://calendly.com/gotosaharsh" 
-                style={{ minWidth: '320px', height: '630px' }}
-              >
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-6 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+          {/* Left Side - Calendly Embed */}
+          <div className="order-2 lg:order-1">
+            <Card className="border border-emerald-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <CardContent className="p-0">
+                {/* Calendly Embed */}
+                <div 
+                  className="calendly-inline-widget bg-gradient-to-br from-gray-50 to-emerald-50/50 rounded-lg overflow-hidden border border-gray-200 min-h-[500px] flex items-center justify-center"
+                  data-url="https://calendly.com/gotosaharsh"
+                  style={{ minWidth: '320px', height: '630px' }}
+                >
+                </div>
+                <p className="text-xs text-gray-400 mt-2 text-center">
+                  A new window will open for the Calendly booking process if the widget does not load.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Side - Info */}
+          <div className="order-1 lg:order-2 space-y-12">
+            {/* What You'll Get */}
+            <div className="space-y-8">
+              <h2 className="text-2xl font-light text-gray-900">What you'll get</h2>
+              <div className="space-y-6">
+                {[
+                  "Personalized consultation tailored to your farm",
+                  "Expert analysis of your soil and crop needs",
+                  "Custom nutrition program recommendations",
+                  "Q&A session with Dr. Raj Madam",
+                ].map((item, index) => (
+                  <div key={index} className="flex items-start space-x-4">
+                    <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 font-light">{item}</span>
+                  </div>
+                ))}
               </div>
-              <p className="text-xs text-gray-400 mt-2 text-center">
-                A new window will open for the Calendly booking process if the widget does not load.
-              </p>
             </div>
 
-            {/* Right Column: Information */}
-            <div className="lg:col-span-1">
-              {/* What to Expect */}
-              <div className="mb-8">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                  <Info className="mr-3 text-[#208A84]" />
-                  What to Expect
-                </h3>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-start"><span className="font-bold text-[#208A84] mr-2">✓</span>Personalized consultation tailored to your farm</li>
-                  <li className="flex items-start"><span className="font-bold text-[#208A84] mr-2">✓</span>Expert analysis of your soil and crop needs</li>
-                  <li className="flex items-start"><span className="font-bold text-[#208A84] mr-2">✓</span>Custom nutrition program recommendations</li>
-                  <li className="flex items-start"><span className="font-bold text-[#208A84] mr-2">✓</span>Q&A session with an industry expert</li>
-                </ul>
+            {/* Meeting Details */}
+            <div className="space-y-8">
+              <h2 className="text-2xl font-light text-gray-900">Meeting details</h2>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <Clock className="w-5 h-5 text-emerald-500" />
+                  <span className="text-gray-700 font-light">30 minutes</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Calendar className="w-5 h-5 text-emerald-500" />
+                  <span className="text-gray-700 font-light">Monday - Thursday, 9:00 AM - 5:00 PM PST</span>
+                </div>
               </div>
-              
-              {/* Available Times */}
-              <div className="mb-8 p-6 bg-green-50/50 border border-green-100 rounded-lg">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                      <Clock className="mr-3 text-[#208A84]" />
-                      Available Hours
-                  </h3>
-                  <p className="text-gray-600">
-                      Our founder is generally available during the following hours. Please check Calendly for specific openings.
-                  </p>
-                  <div className="mt-4 text-center font-medium text-[#1a6e68]">
-                      <p>Monday - Thursday</p>
-                      <p>9:00 AM - 5:00 PM</p>
-                  </div>
-              </div>
+            </div>
 
-              {/* Contact Info */}
-              <div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Need Help?</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center text-gray-600">
-                    <Phone className="mr-3 text-[#208A84]" size={18} />
-                    <span>(555) 123-4567</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Mail className="mr-3 text-[#208A84]" size={18} />
-                    <span>founder@renu-biome.com</span>
-                  </div>
+            {/* Contact */}
+            <div className="space-y-8">
+              <h2 className="text-2xl font-light text-gray-900">Need help?</h2>
+              <div className="flex justify-center">
+                <span className="inline-block bg-emerald-50 text-emerald-700 font-semibold text-lg rounded-full px-5 py-2 shadow-sm border border-emerald-100 mb-2 mt-2">
+                  Dr. Raj Madam
+                </span>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-5 h-5 text-emerald-500" />
+                  <span className="text-gray-700 font-light">(415) 654-3128</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-emerald-500" />
+                  <span className="text-gray-700 font-light">rmadam@renu-biome.com</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
-  );
+    </div>
+  )
 } 
