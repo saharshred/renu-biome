@@ -295,16 +295,17 @@ export default function PlacePurchaseOrderPage() {
     doc.setFont('helvetica', 'bold');
     doc.text(`Subtotal:`, 15, y);
     doc.setFont('helvetica', 'normal');
-    doc.text(`$${subtotal.toFixed(2)}`, 45, y);
+    doc.text(`$${subtotal.toFixed(2)}`, 180, y, { align: 'right' });
     y += 6;
     doc.setFont('helvetica', 'bold');
     doc.text(`Delivery:`, 15, y);
     doc.setFont('helvetica', 'normal');
-    doc.text(`$${deliveryCost.toFixed(2)}`, 45, y);
+    doc.text(`$${deliveryCost.toFixed(2)}`, 180, y, { align: 'right' });
     y += 6;
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text(`Total: $${total.toFixed(2)}`, 15, y);
+    doc.text(`Total:`, 15, y);
+    doc.text(`$${total.toFixed(2)}`, 180, y, { align: 'right' });
     doc.save(`PurchaseOrder_${poNumber || 'unnamed'}.pdf`);
   };
 
@@ -390,41 +391,32 @@ export default function PlacePurchaseOrderPage() {
                     <FileText className="w-6 h-6 mr-3 text-emerald-600" />
                     Purchase Order Details
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Purchase Order Number *
-                      </label>
-                      <div className="flex space-x-2">
-                        <input
-                          type="text"
-                          placeholder="Enter PO number"
-                          value={poNumber}
-                          onChange={(e) => setPoNumber(e.target.value)}
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                        />
-                        <Button
-                          onClick={() => setPoNumber(generatePoNumber())}
-                          className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-6 py-2 font-medium shadow-sm hover:bg-emerald-100 transition mt-1"
-                          variant="ghost"
-                          size="sm"
-                        >
-                          Generate
-                        </Button>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Site Number *
-                      </label>
+                  <div className="flex flex-col gap-4 md:flex-row md:gap-6">
+                    {/* PO Number input group */}
+                    <div className="flex flex-1 min-w-0 items-center">
                       <input
                         type="text"
-                        placeholder="Enter site number"
-                        value={siteNumber}
-                        onChange={(e) => setSiteNumber(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="Enter PO number"
+                        value={poNumber}
+                        onChange={(e) => setPoNumber(e.target.value)}
+                        className="flex-1 min-w-0 h-12 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                       />
+                      <Button
+                        onClick={() => setPoNumber(generatePoNumber())}
+                        className="h-8 ml-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg px-4 font-medium shadow-sm hover:bg-emerald-100 transition text-base"
+                        style={{ whiteSpace: 'nowrap' }}
+                      >
+                        Generate
+                      </Button>
                     </div>
+                    {/* Site Number input */}
+                    <input
+                      type="text"
+                      placeholder="Enter site number"
+                      value={siteNumber}
+                      onChange={(e) => setSiteNumber(e.target.value)}
+                      className="flex-1 min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    />
                   </div>
                 </div>
 
