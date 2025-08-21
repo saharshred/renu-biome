@@ -1,177 +1,157 @@
-# 🌱 Renu Biome - Agricultural Management Platform
+# 🌱 Renu Biome - Internal Business Management Platform
 
-**Renu Biome** is a comprehensive agricultural management platform designed to streamline operations for agricultural businesses, growers, and agricultural product manufacturers. The platform provides tools for customer management, inventory tracking, sales analytics, and agricultural product innovation.
+**Renu Biome** is an agricultural company that manufactures and sells agricultural products. This repository contains our **internal business management platform** - a comprehensive web application that our team uses to manage all aspects of our agricultural business operations.
 
 ![Renu Biome Logo](public/renu-biome-logo-clean.png)
 
-## 🚀 What is Renu Biome?
+## 🚀 What is This Platform?
 
-Renu Biome is a modern web application built for the agricultural industry that helps businesses manage their operations, track customer relationships, monitor inventory, and drive innovation in agricultural products. The platform serves two main user types:
+This is Renu Biome's **internal business management system** that our team uses to:
 
-- **Customers (Growers)**: Access to agricultural products, soil analysis, fertilizer recommendations, and appointment scheduling
-- **Business Owners**: Complete business management including sales, inventory, employee management, and product development
+- **Manage customer relationships** with growers and agricultural businesses
+- **Track inventory** of our agricultural products
+- **Monitor sales performance** and business metrics
+- **Manage employees** and business operations
+- **Track compliance** and certifications
+- **Manage product innovation** and patents
+- **Handle customer appointments** and field visits
 
-## ✨ Key Features
+## 🏢 Company Overview
 
-### 🌾 Customer Dashboard
-- **Soil Analysis & Recommendations**: Access to soil testing reports and personalized fertilizer recommendations
-- **Product Catalog**: Browse and order agricultural products (Biome Care, K-Rush, Karanja Oil, Sirineem, SeaBioLife, SunSkreen)
-- **Appointment Scheduling**: Book consultations with agricultural experts and founders
-- **Legacy Programs**: Access to specialized crop nutrition programs
-- **Invoice Management**: View, pay, and print bills
-- **Field Visit Summaries**: Track field visits and recommendations
+**Renu Biome** is an agricultural company that specializes in:
+- **Soil health products** (Biome Care, N-Care)
+- **Crop nutrition solutions** (K-Rush, Karanja Oil)
+- **Organic and sustainable agricultural products**
+- **Innovation in agricultural technology**
 
-### 🏢 Business Owner Dashboard
-- **Sales Analytics**: Comprehensive sales tracking and reporting with Chart.js integration
-- **Inventory Management**: Track product stock levels and manage suppliers
-- **Employee Management**: Manage team members and their roles
-- **Financial Planning**: Budget planning and expense tracking
-- **Product Innovation**: Pipeline management for new products and innovations
-- **Compliance**: EPA and OMRI certification tracking
-- **Retail Partnerships**: Manage relationships with major retailers (Walmart, Costco, Home Depot, Lowe's)
-- **Patent Management**: Track intellectual property and patents
-- **Trial Database**: Manage product testing and trials
+## 💻 Platform Features
 
-## 🛠️ Technology Stack
+### 👥 Customer Management
+Our team uses this platform to manage relationships with our agricultural customers:
 
-- **Frontend**: Next.js 15 with React 19 (App Router)
-- **Styling**: Tailwind CSS 4 with custom design system
-- **UI Components**: Radix UI components for accessibility
-- **Charts**: Chart.js and Recharts for data visualization
-- **Authentication**: Supabase Auth with Next.js helpers
+- **Customer Dashboard**: Track customer information, orders, and history
+- **Soil Analysis Reports**: Store and manage soil testing results
+- **Fertilizer Recommendations**: Generate and track product recommendations
+- **Field Visit Summaries**: Document customer site visits and consultations
+- **Appointment Scheduling**: Manage customer meetings and consultations
+- **Legacy Programs**: Track long-term customer relationships and programs
+
+### 🏭 Business Operations
+Internal tools for managing our company operations:
+
+- **Sales Analytics**: Track revenue, customer acquisition, and sales performance
+- **Inventory Management**: Monitor product stock levels and supply chain
+- **Employee Management**: Handle HR, payroll, and team organization
+- **Compliance Tracking**: Manage EPA registrations, OMRI certifications, and other regulatory requirements
+- **Patent Management**: Track our intellectual property and innovations
+- **Budget Planning**: Financial planning and expense tracking
+- **Manufacturer Relationships**: Manage partnerships with product manufacturers
+
+### 📊 Reporting & Analytics
+- **Sales Reports**: Comprehensive business performance metrics
+- **Customer Analytics**: Customer behavior and satisfaction tracking
+- **Inventory Reports**: Stock level monitoring and forecasting
+- **Financial Reports**: Revenue, expenses, and profitability analysis
+
+## 🛠️ Technical Stack
+
+- **Frontend**: Next.js 15 with React 19
+- **Styling**: Tailwind CSS with custom design system
 - **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Charts**: Chart.js and Recharts for data visualization
 - **PDF Generation**: jsPDF for document creation
-- **Icons**: Heroicons and Lucide React
-- **TypeScript**: Full type safety throughout the application
+- **UI Components**: Radix UI primitives with custom styling
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+ 
-- npm, yarn, pnpm, or bun
-- Supabase account (for backend services)
+- npm or yarn
+- Supabase account and project
 
 ### Installation
+```bash
+# Clone the repository
+git clone [repository-url]
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd renu-biome
-   ```
+# Install dependencies
+npm install
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   ```
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
 
-3. **Set up environment variables**
-   Create a `.env.local` file in the root directory:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-   ```
+# Run the development server
+npm run dev
+```
 
-4. **Run the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
-   ```
+### Environment Variables
+Create a `.env.local` file with:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
 
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+## 📁 Project Structure
 
-## 📱 Available Scripts
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── dashboard/         # Main dashboard routes
+│   │   ├── customer/      # Customer management features
+│   │   └── owner/         # Business operations features
+│   ├── login/             # Authentication
+│   └── globals.css        # Global styles
+├── components/            # Reusable UI components
+│   ├── ui/               # Base UI components (buttons, inputs, etc.)
+│   └── Sidebar.tsx       # Navigation sidebar
+└── lib/                  # Utilities and configurations
+    ├── api/              # API functions
+    ├── supabaseClient.ts # Database client
+    └── utils.ts          # Helper functions
+```
 
+## 🔧 Development
+
+### Available Scripts
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
 
-## 🏗️ Project Structure
+### Code Style
+- TypeScript for type safety
+- Tailwind CSS for styling
+- Component-based architecture
+- Responsive design principles
 
-```
-renu-biome/
-├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── dashboard/          # Main dashboard routes
-│   │   │   ├── customer/       # Customer-specific features
-│   │   │   └── owner/          # Business owner features
-│   │   ├── login/              # Authentication
-│   │   └── layout.tsx          # Root layout
-│   ├── components/             # Reusable UI components
-│   │   ├── ui/                 # Base UI components
-│   │   └── Sidebar.tsx         # Navigation sidebar
-│   └── lib/                    # Utility functions and API
-│       ├── api/                # API endpoints
-│       ├── supabaseClient.ts   # Supabase configuration
-│       └── utils.ts            # Helper functions
-├── public/                     # Static assets
-└── tailwind.config.js          # Tailwind CSS configuration
-```
+## 📱 User Roles
 
-## 🔐 Authentication
+### Customer Service Team
+- Access to customer management features
+- Can view customer orders and history
+- Manage appointments and field visits
 
-The platform uses Supabase for authentication with role-based access control:
-- **Customer accounts**: Access to customer dashboard features
-- **Owner accounts**: Full access to business management features
+### Business Operations Team
+- Full access to sales and inventory data
+- Employee and compliance management
+- Financial reporting and planning
 
-## 📊 Data Visualization
-
-The platform includes comprehensive data visualization capabilities:
-- **Sales Analytics**: Interactive charts for revenue tracking
-- **Inventory Reports**: Stock level monitoring and trends
-- **Customer Insights**: Relationship management analytics
-- **Financial Dashboards**: Budget vs. actual tracking
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
-
-### Other Platforms
-The application can be deployed to any platform that supports Next.js:
-- Netlify
-- Railway
-- DigitalOcean App Platform
-- AWS Amplify
+### Management Team
+- Complete access to all platform features
+- Strategic business analytics
+- Innovation and patent tracking
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+This is an internal platform for Renu Biome team members. For questions or issues, please contact the development team.
 
 ## 📄 License
 
-This project is proprietary software. All rights reserved.
-
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the GitHub repository
-- Contact the development team
-- Check the documentation in the dashboard
-
-## 🔮 Roadmap
-
-- **Mobile App**: Native iOS and Android applications
-- **AI Integration**: Machine learning for crop recommendations
-- **IoT Integration**: Sensor data integration for precision agriculture
-- **Marketplace**: Direct-to-consumer product sales
-- **Analytics**: Advanced business intelligence and reporting
+Internal use only - Renu Biome proprietary software.
 
 ---
 
-**Built with ❤️ for the agricultural community**
+**Built with ❤️ by the Renu Biome team**
