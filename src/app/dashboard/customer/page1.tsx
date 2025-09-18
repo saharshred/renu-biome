@@ -169,7 +169,7 @@ export default function CustomerDashboard() {
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-emerald-800 to-gray-900 bg-clip-text text-transparent">
-                Welcome Back, Jack
+                Welcome Back, RD
               </h1>
               <p className="text-gray-600">Your advanced crop nutrition command center</p>
             </div>
